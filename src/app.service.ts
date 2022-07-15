@@ -17,7 +17,8 @@ export class AppService {
 
   async getQuoteRandom() {
     try {
-      const promise = this.httpService.get("https://type.fit/api/quotes")
+      const { apiQuotes } = this.configService.get("app")
+      const promise = this.httpService.get(apiQuotes)
       const response = await lastValueFrom(promise);
 
       if (response.status !== 200)
