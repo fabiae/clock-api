@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, InternalServerErrorException } from '@nestjs/common';
 import { ResponseError } from './@common/interfaces/error.interface';
 import { ResponseSuccess } from './@common/interfaces/succes.interface';
 import { AppService } from './app.service';
@@ -15,8 +15,13 @@ export class AppController {
   }
 
   @Get("/quote-random")
-  async getQuoteRandom()/* : Promise<ResponseSuccess | ResponseError> */ {
-    return await this.appService.getQuoteRandom()
+  async getQuoteRandom(): Promise<ResponseSuccess | ResponseError> {
+    const response = await this.appService.getQuoteRandom()
+
+    if (response.error)
+      throw new InternalServerErrorException(response.error)
+
+    return response
   }
 
 }
